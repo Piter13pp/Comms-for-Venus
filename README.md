@@ -1,1 +1,1 @@
-Two Publishers & One Listener - Actual structure
+Two Publishers & One Listener
