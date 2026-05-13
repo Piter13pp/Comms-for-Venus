@@ -30,9 +30,9 @@ def messageHandler(client, userdata, message):
 if __name__ == "__main__":
     # To be changed with actual credentials and host if needed
     Broker(
-        host="localhost", #or mqtt.ics.ele.tue.nl
-        username="USER", 
-        password="PASSWORD", 
-        topicSubList=["topic1", "topic2"], 
+        host="mqtt.ics.ele.tue.nl", #or mqtt.ics.ele.tue.nl
+        username="robot_26_1",
+        password="L9bkrgZz",
+        topicSubList=["topic1", "topic2", "/pynqbridge/26/test", "/pynqbridge/26/send"], 
         messageHandler=messageHandler
     )

@@ -1,9 +1,9 @@
 import paho.mqtt.client as paho
 
-HOST = "localhost"  #or mqtt.ics.ele.tue.nl
-USER = "USER"
-PASS = "PASSWORD"
-TOPIC = "topic1"
+HOST = "mqtt.ics.ele.tue.nl"  #or mqtt.ics.ele.tue.nl
+USER = "robot_26_1"
+PASS = "L9bkrgZz"
+TOPIC = "/pynqbridge/26/test"
 
 client = paho.Client(paho.CallbackAPIVersion.VERSION2)
 client.username_pw_set(USER, PASS)
