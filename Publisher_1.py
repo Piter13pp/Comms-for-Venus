@@ -1,8 +1,12 @@
 import paho.mqtt.client as paho
+import os
+from dotenv import load_dotenv
+
+load_dotenv("passes.env")
 
 HOST = "mqtt.ics.ele.tue.nl"  #or mqtt.ics.ele.tue.nl
-USER = "robot_26_1"
-PASS = "L9bkrgZz"
+USER = "robot_26_1" #or robot_58_1
+PASS = os.getenv("pass26")
 TOPIC = "/pynqbridge/26/send"  #or /pynqbridge/58/send
 
 client = paho.Client(paho.CallbackAPIVersion.VERSION2)
