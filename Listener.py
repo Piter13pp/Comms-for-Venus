@@ -1,4 +1,12 @@
 import paho.mqtt.client as paho
+import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv("passes.env")
+
+def current_time():
+    return time.strftime("%d-%m-%Y %H:%M:%S", time.localtime())
 
 class Broker:
     def __init__(self, host, username, password, topicSubList, messageHandler):
@@ -9,30 +17,40 @@ class Broker:
         if self.client.connect(host=host) != 0:
             raise RuntimeError("Couldn't connect to the MQTT host")
             
-        try:
-            for topic in topicSubList:
-                self.client.subscribe(topic)
-            print(f"Listening for messages on: {topicSubList}")
-            print("Press CTRL+C to stop.")
-            self.client.loop_forever()
-        except KeyboardInterrupt:
-            print("\nListener stopped by user.")
-        except Exception as error:
-            print(error)
-        finally:
-            self.client.disconnect()
-            print("Disconnected from MQTT.")
+        for topic in topicSubList:
+            self.client.subscribe(topic)
+        print(f"Listening for messages on: {topicSubList}")
+        
+        self.client.loop_start() 
 
 def messageHandler(client, userdata, message):
-    # This distinguishes between the two topics automatically
-    print(f"[{message.topic}] -> {message.payload.decode('utf-8')}")
+    print(f"{current_time()}: [{message.topic}] -> {message.payload.decode('utf-8')}")
 
-if __name__ == "__main__":
-    # To be changed with actual credentials and host if needed
-    Broker(
-        host="mqtt.ics.ele.tue.nl", #or mqtt.ics.ele.tue.nl
-        username="robot_26_1",
-        password="L9bkrgZz",
-        topicSubList=["topic1", "topic2", "/pynqbridge/26/test", "/pynqbridge/26/send"], 
+def choose_robot(robot_number):
+    if robot_number == 58:
+        Broker(
+        host="mqtt.ics.ele.tue.nl",
+        username="robot_58_1",
+        password=os.getenv("pass58"),
+        topicSubList=["/pynqbridge/58/recv", "/pynqbridge/58/send"],
         messageHandler=messageHandler
     )
+    elif robot_number == 26:
+        Broker(
+        host="mqtt.ics.ele.tue.nl",
+        username="robot_26_1",
+        password=os.getenv("pass26"),
+        topicSubList=["/pynqbridge/26/recv", "/pynqbridge/26/send"],
+        messageHandler=messageHandler
+    )
+
+if __name__ == "__main__":
+    choose_robot(58)
+    choose_robot(26)
+    
+    try:
+        print("Press CTRL+C to stop.\n")
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nListener stopped by user.")
