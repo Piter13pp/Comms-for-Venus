@@ -26,27 +26,22 @@ class Broker:
 def messageHandler(client, userdata, message):
     print(f"{current_time()}: [{message.topic}] -> {message.payload.decode('utf-8')}")
 
-def choose_robot(robot_number):
-    if robot_number == 58:
-        Broker(
+
+if __name__ == "__main__":
+    Broker(
         host="mqtt.ics.ele.tue.nl",
         username="robot_58_1",
         password=os.getenv("pass58"),
         topicSubList=["/pynqbridge/58/recv", "/pynqbridge/58/send"],
         messageHandler=messageHandler
     )
-    elif robot_number == 26:
-        Broker(
+    Broker(
         host="mqtt.ics.ele.tue.nl",
         username="robot_26_1",
         password=os.getenv("pass26"),
         topicSubList=["/pynqbridge/26/recv", "/pynqbridge/26/send"],
         messageHandler=messageHandler
     )
-
-if __name__ == "__main__":
-    choose_robot(58)
-    choose_robot(26)
     
     try:
         print("Press CTRL+C to stop.\n")
